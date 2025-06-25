@@ -2,7 +2,6 @@ import subprocess
 import json
 import os
 import asyncio
-from typing import Dict, Optional, Tuple
 from python.helpers.print_style import PrintStyle
 
 
@@ -16,7 +15,7 @@ class ClaudeAuthManager:
         self.claude_dir = os.path.expanduser("~/.claude")
         self.config_file = os.path.join(self.claude_dir, "config.json")
         
-    def is_claude_cli_installed(self) -> bool:
+    def is_claude_cli_installed(self):
         """Check if Claude Code CLI is installed and available."""
         try:
             result = subprocess.run(
@@ -29,7 +28,7 @@ class ClaudeAuthManager:
         except (subprocess.TimeoutExpired, FileNotFoundError):
             return False
     
-    def check_auth_status(self) -> Tuple[bool, Optional[str]]:
+    def check_auth_status(self):
         """
         Check if user is authenticated with Claude Pro/Max.
         
@@ -64,7 +63,7 @@ class ClaudeAuthManager:
         except Exception as e:
             return False, f"Error checking authentication: {str(e)}"
     
-    async def initiate_login(self) -> Tuple[bool, str]:
+    async def initiate_login(self):
         """
         Initiate Claude Pro/Max login process.
         
@@ -108,7 +107,7 @@ class ClaudeAuthManager:
         except Exception as e:
             return False, f"Login failed: {str(e)}"
     
-    def logout(self) -> Tuple[bool, str]:
+    def logout(self):
         """
         Logout and clear Claude authentication.
         
@@ -126,7 +125,7 @@ class ClaudeAuthManager:
         except Exception as e:
             return False, f"Logout failed: {str(e)}"
     
-    def get_auth_info(self) -> Dict[str, any]:
+    def get_auth_info(self):
         """
         Get detailed authentication information.
         
@@ -144,7 +143,7 @@ class ClaudeAuthManager:
             "config_exists": os.path.exists(self.claude_dir)
         }
     
-    async def test_claude_connection(self) -> Tuple[bool, str]:
+    async def test_claude_connection(self):
         """
         Test Claude connection with a simple query.
         
