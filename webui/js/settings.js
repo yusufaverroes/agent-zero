@@ -283,7 +283,7 @@ const settingsModalProxy = {
     },
 
     async handleFieldButton(field) {
-        console.log(`Button clicked: ${field.id}`);
+        console.log(`Button clicked: ${field.id}, action: ${field.action}`);
 
         if (field.id === "mcp_servers_config") {
             openModal("settings/mcp/client/mcp-servers.html");
@@ -295,6 +295,8 @@ const settingsModalProxy = {
             await this.claudeLogout(field);
         } else if (field.action === "claude_test") {
             await this.claudeTest(field);
+        } else {
+            console.log(`Unknown action: ${field.action} for button: ${field.id}`);
         }
     },
 
