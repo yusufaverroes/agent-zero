@@ -30,6 +30,9 @@ RUN bash /ins/install_python.sh
 # install searxng
 RUN bash /ins/install_searxng.sh
 
+# install claude code cli
+RUN bash /ins/install_claude_code.sh
+
 # configure ssh
 RUN bash /ins/configure_ssh.sh
 

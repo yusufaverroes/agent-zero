@@ -287,6 +287,137 @@ const settingsModalProxy = {
 
         if (field.id === "mcp_servers_config") {
             openModal("settings/mcp/client/mcp-servers.html");
+        } else if (field.action === "check_claude_auth") {
+            await this.checkClaudeAuthStatus(field);
+        } else if (field.action === "claude_login") {
+            await this.claudeLogin(field);
+        } else if (field.action === "claude_logout") {
+            await this.claudeLogout(field);
+        } else if (field.action === "claude_test") {
+            await this.claudeTest(field);
+        }
+    },
+
+    async checkClaudeAuthStatus(field) {
+        try {
+            field.loading = true;
+            field.status = "Checking...";
+            
+            const response = await fetch("/claude_auth_status", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                const status = data.status;
+                if (status.authenticated) {
+                    field.status = "✅ Authenticated";
+                    field.statusColor = "green";
+                } else {
+                    field.status = `❌ Not authenticated: ${status.error}`;
+                    field.statusColor = "red";
+                }
+            } else {
+                field.status = `❌ Error: ${data.error}`;
+                field.statusColor = "red";
+            }
+        } catch (error) {
+            field.status = `❌ Error: ${error.message}`;
+            field.statusColor = "red";
+        } finally {
+            field.loading = false;
+        }
+    },
+
+    async claudeLogin(field) {
+        try {
+            field.loading = true;
+            field.status = "Logging in...";
+            
+            const response = await fetch("/claude_auth_login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                field.status = "✅ Login successful";
+                field.statusColor = "green";
+                showToast("Successfully logged in to Claude Pro/Max", "success");
+            } else {
+                field.status = `❌ Login failed: ${data.message}`;
+                field.statusColor = "red";
+                showToast(`Login failed: ${data.message}`, "error");
+            }
+        } catch (error) {
+            field.status = `❌ Error: ${error.message}`;
+            field.statusColor = "red";
+            showToast(`Login error: ${error.message}`, "error");
+        } finally {
+            field.loading = false;
+        }
+    },
+
+    async claudeLogout(field) {
+        try {
+            field.loading = true;
+            field.status = "Logging out...";
+            
+            const response = await fetch("/claude_auth_logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                field.status = "✅ Logged out";
+                field.statusColor = "green";
+                showToast("Successfully logged out from Claude", "success");
+            } else {
+                field.status = `❌ Logout failed: ${data.message}`;
+                field.statusColor = "red";
+                showToast(`Logout failed: ${data.message}`, "error");
+            }
+        } catch (error) {
+            field.status = `❌ Error: ${error.message}`;
+            field.statusColor = "red";
+            showToast(`Logout error: ${error.message}`, "error");
+        } finally {
+            field.loading = false;
+        }
+    },
+
+    async claudeTest(field) {
+        try {
+            field.loading = true;
+            field.status = "Testing connection...";
+            
+            const response = await fetch("/claude_auth_test", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                field.status = "✅ Connection test successful";
+                field.statusColor = "green";
+                showToast("Claude Code connection test successful", "success");
+            } else {
+                field.status = `❌ Test failed: ${data.message}`;
+                field.statusColor = "red";
+                showToast(`Connection test failed: ${data.message}`, "error");
+            }
+        } catch (error) {
+            field.status = `❌ Error: ${error.message}`;
+            field.statusColor = "red";
+            showToast(`Test error: ${error.message}`, "error");
+        } finally {
+            field.loading = false;
         }
     }
 };

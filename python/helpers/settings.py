@@ -495,6 +495,49 @@ def convert_out(settings: Settings) -> SettingsOutput:
         "fields": api_keys_fields,
         "tab": "external",
     }
+    
+    # Claude Code SDK section
+    claude_code_fields: list[SettingsField] = []
+    claude_code_fields.append({
+        "id": "claude_code_auth_status",
+        "title": "Authentication Status",
+        "description": "Check Claude Code Pro/Max authentication status",
+        "type": "button",
+        "value": "Check Status",
+        "action": "check_claude_auth"
+    })
+    claude_code_fields.append({
+        "id": "claude_code_login",
+        "title": "Login to Claude Pro/Max",
+        "description": "Authenticate with your Claude Pro or Max subscription",
+        "type": "button", 
+        "value": "Login",
+        "action": "claude_login"
+    })
+    claude_code_fields.append({
+        "id": "claude_code_logout",
+        "title": "Logout",
+        "description": "Clear Claude authentication credentials",
+        "type": "button",
+        "value": "Logout", 
+        "action": "claude_logout"
+    })
+    claude_code_fields.append({
+        "id": "claude_code_test",
+        "title": "Test Connection",
+        "description": "Test Claude Code connection and functionality",
+        "type": "button",
+        "value": "Test Connection",
+        "action": "claude_test"
+    })
+    
+    claude_code_section: SettingsSection = {
+        "id": "claude_code",
+        "title": "Claude Code SDK (Pro/Max)",
+        "description": "Authentication and configuration for Claude Code CLI integration. Requires Claude Pro or Max subscription.",
+        "fields": claude_code_fields,
+        "tab": "external",
+    }
 
     # Agent config section
     agent_fields: list[SettingsField] = []
@@ -781,6 +824,7 @@ def convert_out(settings: Settings) -> SettingsOutput:
             # memory_section,
             stt_section,
             api_keys_section,
+            claude_code_section,
             auth_section,
             mcp_client_section,
             mcp_server_section,

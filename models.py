@@ -44,6 +44,7 @@ class ModelType(Enum):
 class ModelProvider(Enum):
     ANTHROPIC = "Anthropic"
     CHUTES = "Chutes"
+    CLAUDE_CODE = "Claude Code SDK"
     DEEPSEEK = "DeepSeek"
     GOOGLE = "Google"
     GROQ = "Groq"
@@ -431,3 +432,24 @@ def get_chutes_chat(
             dotenv.get_dotenv_value("CHUTES_BASE_URL") or "https://llm.chutes.ai/v1"
         )
     return ChatOpenAI(api_key=api_key, model=model_name, base_url=base_url, **kwargs)  # type: ignore
+
+
+# Claude Code SDK models
+def get_claude_code_chat(
+    model_name: str,
+    **kwargs,
+):
+    from python.helpers.claude_code import ClaudeCodeChatModel
+    return ClaudeCodeChatModel(model_name=model_name, **kwargs)
+
+
+# Claude Code doesn't have embedding models - fallback to OpenAI
+def get_claude_code_embedding(
+    model_name: str,
+    api_key=None,
+    **kwargs,
+):
+    # Claude Code doesn't support embeddings, use OpenAI as fallback
+    if not api_key:
+        api_key = get_api_key("openai")
+    return OpenAIEmbeddings(model=model_name, api_key=api_key, **kwargs)  # type: ignore
