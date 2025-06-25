@@ -55,4 +55,5 @@ instruments/**
 
 # Global rule to include .gitkeep files anywhere
 !**/.gitkeep
-agent_history.gifdocker/run/test-data
+agent_history.gif
+docker/run/test-data
