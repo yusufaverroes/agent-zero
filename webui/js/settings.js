@@ -284,6 +284,7 @@ const settingsModalProxy = {
 
     async handleFieldButton(field) {
         console.log(`Button clicked: ${field.id}, action: ${field.action}`);
+        console.log('Full field object:', field);
 
         if (field.id === "mcp_servers_config") {
             openModal("settings/mcp/client/mcp-servers.html");
